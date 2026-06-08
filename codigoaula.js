@@ -68,6 +68,12 @@ function criarCardNaTela(tarefa, salvar) {
   const itemLi = div.querySelector(".item-list");
   const checkbox = div.querySelector(".checkbox-concluir");
 
+  // restaura o estado de concluída se estava marcada
+  if (tarefa.concluida) {
+    checkbox.checked = true;
+    itemLi.classList.add("concluida");
+  }
+
   // ao marcar o checkbox, risca o texto da tarefa
   checkbox.addEventListener("change", () => {
     itemLi.classList.toggle("concluida");
@@ -115,15 +121,15 @@ function criarCardNaTela(tarefa, salvar) {
 // salva todas as tarefas no localstorage
 function salvarNoLocalStorage() {
   const cards = listaTarefas.querySelectorAll(".card-item");
-  const tarefas = []; // array que vai guardar os textos
+  const tarefas = [];
 
-  // percorre cada card e pega o texto usando forEach
+  // percorre cada card e salva o texto e se está concluída
   cards.forEach((card) => {
     const texto = card.querySelector(".item-list").textContent;
-    tarefas.push(texto);
+    const concluida = card.querySelector(".checkbox-concluir").checked;
+    tarefas.push({ texto, concluida });
   });
 
-  // converte o array para string e salva
   localStorage.setItem("tarefas", JSON.stringify(tarefas));
 }
 
@@ -132,14 +138,13 @@ function carregarDoLocalStorage() {
   const tarefasSalvas = localStorage.getItem("tarefas");
 
   if (tarefasSalvas) {
-    // converte a string de volta para array
     const tarefas = JSON.parse(tarefasSalvas);
 
-    // recria cada tarefa na tela usando forEach
-    tarefas.forEach((texto) => {
+    tarefas.forEach((item) => {
       const tarefa = {
         id: Date.now(),
-        texto: texto
+        texto: item.texto,
+        concluida: item.concluida
       };
       criarCardNaTela(tarefa, false);
     });
@@ -171,7 +176,6 @@ function verificarListaVazia() {
   const mensagemExistente = document.getElementById("mensagemVazia");
 
   if (cards.length === 0) {
-    // cria a mensagem se ainda não existir
     if (!mensagemExistente) {
       const mensagem = document.createElement("p");
       mensagem.id = "mensagemVazia";
@@ -179,7 +183,6 @@ function verificarListaVazia() {
       listaTarefas.appendChild(mensagem);
     }
   } else {
-    // remove a mensagem se tiver tarefas
     if (mensagemExistente) {
       listaTarefas.removeChild(mensagemExistente);
     }
