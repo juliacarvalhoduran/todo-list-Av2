@@ -1,13 +1,12 @@
-// ===========================
-// SELEÇÃO DOS ELEMENTOS DO HTML
-// ===========================
+// pegando os elementos do HTML pelo id
 const inputTarefa = document.getElementById("novaTarefa");
 const btnAdicionar = document.getElementById("btnAdicionar");
 const listaTarefas = document.getElementById("lista");
 
-// Evento de clique no botão — usando função tradicional
+// quando clicar no botão adicionar, chama a função
 btnAdicionar.addEventListener("click", adicionarTarefa);
-// Botão limpar tudo
+
+// quando clicar em limpar tudo, pede confirmação e apaga tudo
 document.getElementById("btnLimpar").addEventListener("click", () => {
   if (confirm("Tem certeza que deseja apagar todas as tarefas?")) {
     listaTarefas.innerHTML = "";
@@ -17,67 +16,69 @@ document.getElementById("btnLimpar").addEventListener("click", () => {
   }
 });
 
-// Permite adicionar tarefas pressionando Enter
+// quando pressionar Enter no input, também adiciona a tarefa
 inputTarefa.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     adicionarTarefa();
   }
 });
 
-// ===========================
-// FUNÇÃO ADICIONAR (function tradicional)
-// ===========================
+// função que adiciona uma nova tarefa na lista
 function adicionarTarefa() {
   const texto = inputTarefa.value;
 
+  // se o campo estiver vazio, avisa e para
   if (texto === "") {
     alert("Digite uma tarefa!");
     return;
   }
 
+  // cria um objeto com id único e o texto digitado
   const tarefa = {
     id: Date.now(),
     texto: texto
   };
 
+  // mostra no console usando interpolação
   console.log(`Nova tarefa adicionada: ${tarefa.texto}`);
 
   criarCardNaTela(tarefa, true);
-  inputTarefa.value = "";
+  inputTarefa.value = ""; // limpa o campo após adicionar
   atualizarContador();
 }
 
-// ===========================
-// FUNÇÃO CRIAR CARD (function tradicional)
-// ===========================
+// função que cria o card visualmente na página
 function criarCardNaTela(tarefa, salvar) {
   const div = document.createElement("div");
   div.className = "card-item";
 
-  // 1. Primeiro cria o HTML
+  // monta o html do card usando interpolação
   div.innerHTML = `
-  <div class="item-content">
-    <input type="checkbox" class="checkbox-concluir">
-    <li class="item-list">${tarefa.texto}</li>
-  </div>
-  <div class="btns-item">
-    <button class="btn-edit">Editar</button>
-    <button class="btn-delete">Apagar</button>
-  </div>
-`;
-  // Clicar no texto marca/desmarca a tarefa como concluída
-const itemLi = div.querySelector(".item-list");
-const checkbox = div.querySelector(".checkbox-concluir");
-checkbox.addEventListener("change", () => {
-  itemLi.classList.toggle("concluida");
-  salvarNoLocalStorage();
-});
+    <div class="item-content">
+      <input type="checkbox" class="checkbox-concluir">
+      <li class="item-list">${tarefa.texto}</li>
+    </div>
+    <div class="btns-item">
+      <button class="btn-edit">Editar</button>
+      <button class="btn-delete">Apagar</button>
+    </div>
+  `;
 
-  // 2. Depois pega os botões
+  // pega o texto e o checkbox do card
+  const itemLi = div.querySelector(".item-list");
+  const checkbox = div.querySelector(".checkbox-concluir");
+
+  // ao marcar o checkbox, risca o texto da tarefa
+  checkbox.addEventListener("change", () => {
+    itemLi.classList.toggle("concluida");
+    salvarNoLocalStorage();
+  });
+
+  // pega os botões só depois de criar o html
   const btnDelete = div.querySelector(".btn-delete");
   const btnEdit = div.querySelector(".btn-edit");
 
-  // Botão apagar — arrow function
+  // ao clicar em apagar, remove o card da tela
   btnDelete.addEventListener("click", () => {
     listaTarefas.removeChild(div);
     salvarNoLocalStorage();
@@ -85,7 +86,8 @@ checkbox.addEventListener("change", () => {
     verificarListaVazia();
   });
 
-  // Botão editar — arrow function
+  // ao clicar em editar, vira um input para digitar
+  // ao clicar em salvar, salva o novo texto
   btnEdit.addEventListener("click", () => {
     const itemLi = div.querySelector(".item-list");
     if (btnEdit.textContent === "Salvar") {
@@ -99,9 +101,10 @@ checkbox.addEventListener("change", () => {
     }
   });
 
-  // 3. Por último adiciona na tela
+  // adiciona o card na lista da tela
   listaTarefas.appendChild(div);
 
+  // só salva no localstorage se não estiver carregando
   if (salvar) {
     salvarNoLocalStorage();
   }
@@ -109,32 +112,30 @@ checkbox.addEventListener("change", () => {
   verificarListaVazia();
 }
 
-// ===========================
-// FUNÇÃO SALVAR NO LOCALSTORAGE (function tradicional)
-// ===========================
+// salva todas as tarefas no localstorage
 function salvarNoLocalStorage() {
   const cards = listaTarefas.querySelectorAll(".card-item");
-  const tarefas = [];
+  const tarefas = []; // array que vai guardar os textos
 
-  // Arrow function no forEach
+  // percorre cada card e pega o texto usando forEach
   cards.forEach((card) => {
     const texto = card.querySelector(".item-list").textContent;
     tarefas.push(texto);
   });
 
+  // converte o array para string e salva
   localStorage.setItem("tarefas", JSON.stringify(tarefas));
 }
 
-// ===========================
-// FUNÇÃO CARREGAR DO LOCALSTORAGE (function tradicional)
-// ===========================
+// carrega as tarefas salvas quando a página abre
 function carregarDoLocalStorage() {
   const tarefasSalvas = localStorage.getItem("tarefas");
 
   if (tarefasSalvas) {
+    // converte a string de volta para array
     const tarefas = JSON.parse(tarefasSalvas);
 
-    // Arrow function no forEach
+    // recria cada tarefa na tela usando forEach
     tarefas.forEach((texto) => {
       const tarefa = {
         id: Date.now(),
@@ -148,16 +149,13 @@ function carregarDoLocalStorage() {
   verificarListaVazia();
 }
 
-// ===========================
-// FUNÇÃO CONTADOR DE TAREFAS
-// ===========================
+// atualiza o contador de tarefas no header
 function atualizarContador() {
   const cards = listaTarefas.querySelectorAll(".card-item");
   const total = cards.length;
-
-  // Concatenação para montar o texto
   const contador = document.getElementById("contador");
 
+  // concatenação para montar o texto do contador
   if (total === 0) {
     contador.textContent = "Nenhuma tarefa";
   } else if (total === 1) {
@@ -166,14 +164,14 @@ function atualizarContador() {
     contador.textContent = total + " tarefas";
   }
 }
-// ===========================
-// FUNÇÃO MENSAGEM LISTA VAZIA
-// ===========================
+
+// mostra mensagem quando a lista está vazia
 function verificarListaVazia() {
   const cards = listaTarefas.querySelectorAll(".card-item");
   const mensagemExistente = document.getElementById("mensagemVazia");
 
   if (cards.length === 0) {
+    // cria a mensagem se ainda não existir
     if (!mensagemExistente) {
       const mensagem = document.createElement("p");
       mensagem.id = "mensagemVazia";
@@ -181,11 +179,12 @@ function verificarListaVazia() {
       listaTarefas.appendChild(mensagem);
     }
   } else {
+    // remove a mensagem se tiver tarefas
     if (mensagemExistente) {
       listaTarefas.removeChild(mensagemExistente);
     }
   }
 }
 
-// Carrega as tarefas salvas ao abrir a página
+// inicia carregando as tarefas salvas
 carregarDoLocalStorage();

@@ -1,23 +1,28 @@
+/* importando a fonte Inter do Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+/* zerando margens e espaçamentos padrão do navegador */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* estilo geral da página */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f7f8fc;
   color: #222;
 }
 
+/* cabeçalho azul no topo */
 header {
   background-color: #2563eb;
   padding: 28px 20px;
   text-align: center;
 }
 
+/* título principal */
 header h1 {
   font-size: 2.5rem;
   font-weight: 600;
@@ -25,6 +30,7 @@ header h1 {
   letter-spacing: 1px;
 }
 
+/* contador de tarefas abaixo do título */
 #contador {
   color: white;
   font-size: 16px;
@@ -32,18 +38,21 @@ header h1 {
   margin-top: 6px;
 }
 
+/* container principal centralizado na tela */
 #container {
   max-width: 900px;
   margin: 30px auto;
   padding: 0 40px;
 }
 
+/* área do input e botões em linha */
 section {
   display: flex;
   gap: 10px;
   margin-bottom: 24px;
 }
 
+/* campo de texto para digitar a tarefa */
 input[type="text"] {
   flex: 1;
   padding: 11px 14px;
@@ -56,10 +65,12 @@ input[type="text"] {
   background: white;
 }
 
+/* borda azul quando o input está em foco */
 input[type="text"]:focus {
   border-color: #2563eb;
 }
 
+/* botão de adicionar tarefa */
 #btnAdicionar {
   padding: 11px 18px;
   background-color: #2563eb;
@@ -73,10 +84,12 @@ input[type="text"]:focus {
   transition: background 0.2s;
 }
 
+/* efeito hover no botão adicionar */
 #btnAdicionar:hover {
   background-color: #1d4ed8;
 }
 
+/* botão de limpar todas as tarefas */
 #btnLimpar {
   padding: 11px 18px;
   background-color: white;
@@ -90,17 +103,20 @@ input[type="text"]:focus {
   transition: all 0.2s;
 }
 
+/* fica vermelho ao passar o mouse */
 #btnLimpar:hover {
   background-color: #dc2626;
   color: white;
   border-color: #dc2626;
 }
 
+/* removendo os marcadores padrão da lista */
 ul {
   list-style: none;
   padding: 0;
 }
 
+/* card de cada tarefa */
 .card-item {
   background: white;
   padding: 12px 16px;
@@ -110,9 +126,10 @@ ul {
   align-items: center;
   justify-content: space-between;
   border: 1.5px solid #e5e7eb;
-  border-left: 4px solid #2563eb;
+  border-left: 4px solid #2563eb; /* destaque azul na lateral */
 }
 
+/* área do checkbox + texto da tarefa */
 .item-content {
   display: flex;
   align-items: center;
@@ -120,6 +137,7 @@ ul {
   flex: 1;
 }
 
+/* checkbox de marcar como concluída */
 .checkbox-concluir {
   width: 16px;
   height: 16px;
@@ -128,6 +146,7 @@ ul {
   flex-shrink: 0;
 }
 
+/* texto da tarefa */
 .item-list {
   font-size: 16px;
   color: #333;
@@ -135,56 +154,58 @@ ul {
   cursor: default;
 }
 
-
+/* texto riscado quando a tarefa é concluída */
 .concluida {
   text-decoration: line-through;
   color: #aaa;
 }
 
+/* área dos botões editar e apagar */
 .btns-item {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
 }
 
+/* botão editar */
 .btn-edit {
-  padding: 5px 12px;
+  padding: 7px 16px;
   background-color: white;
   color: #2563eb;
   border: 1.5px solid #2563eb;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: all 0.2s;
 }
 
+/* fica azul ao passar o mouse */
 .btn-edit:hover {
   background-color: #2563eb;
   color: white;
 }
 
+/* botão apagar */
 .btn-delete {
-  padding: 5px 12px;
+  padding: 7px 16px;
   background-color: white;
   color: #dc2626;
   border: 1.5px solid #dc2626;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: all 0.2s;
 }
 
+/* fica vermelho ao passar o mouse */
 .btn-delete:hover {
   background-color: #dc2626;
   color: white;
 }
-.btn-edit, .btn-delete {
-  padding: 7px 16px;
-  font-size: 14px;
-}
 
+/* mensagem exibida quando não há tarefas */
 #mensagemVazia {
   text-align: center;
   color: #aaa;
