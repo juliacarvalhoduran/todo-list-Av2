@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  📝 To Do List
+  To Do List
   <br>
 </h1>
 
